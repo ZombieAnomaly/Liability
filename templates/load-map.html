@@ -7,8 +7,17 @@
 	<meta name="author" content="Corey Birnbaum" />
 	<title>Grid</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/normalize.css') }}" />
+	<link href="css/normalize.css" rel="stylesheet" type="text/css"/>
+	<style>
+		body {
+			overflow: hidden;
+		}
+		#view {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	</style>
 </head>
 
 <body>
@@ -18,49 +27,29 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='von-grid/lib/three.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='von-grid/lib/OrbitControls.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='von-grid/dist/hex-grid.min.js') }}"></script>
-    
-    <script type="text/javascript">
-
+	<script type="text/javascript">
 	window.addEventListener('load', function(evt) {
-        
 		var scene = new vg.Scene({
 			element: document.getElementById('view'),
-			cameraPosition: {x:0, y:300, z:400}
+			cameraPosition: {x:0, y:150, z:150}
 		}, true);
 
 		// this constructs the cells in grid coordinate space
-		var grid = new vg.HexGrid({
-			cellSize: 40 // size of individual cells
-		});
-
-		grid.generate({
-			size: 5 // size of the board
-		});
-
+		var grid = new vg.HexGrid();
 		var mouse = new vg.MouseCaster(scene.container, scene.camera);
 		var board = new vg.Board(grid);
 
-		// this will generate extruded hexagonal tiles
-		board.generateTilemap({
-			tileScale: 0.96 // you might have to scale the tile so the extruded geometry fits the cell size perfectly
-		});
+		grid.load('assets/hex-map.json', function() {
+			// this will generate extruded hexagonal tiles of the grid that was loaded
+			board.generateTilemap();
+		}, this);
 
 		scene.add(board.group);
 		scene.focusOn(board.group);
 
-		var vec = new THREE.Vector3();
-
 		mouse.signal.add(function(evt, tile) {
 			if (evt === vg.MouseCaster.CLICK) {
 				tile.toggle();
-                console.log(tile);
-                var neighbors = grid.getNeighbors(tile.cell, false);
-                console.log(neighbors);
-
-                /* or we can use the mouse's raw coordinates to access the cell directly, just for fun:
-				var cell = board.grid.pixelToCell(mouse.position);
-				var t = board.getTileAtCell(cell);
-                if (t) t.toggle();*/
 			}
 		}, this);
 

@@ -11,7 +11,14 @@
 
 </head>
 <body>
-    <script src="{{ url_for('static', filename='js/three.js') }}"></script>
+
+    <div id="view"></div>
+
+    <script src="{{ url_for('static', filename='js/ThreeJS/three.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ThreeJS/OrbitControls.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/Hex/scene.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Hex/tile.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game-script.js') }}"></script>
     
 </body>

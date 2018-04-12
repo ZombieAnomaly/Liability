@@ -13,7 +13,7 @@ def helloworld():
   headers = ['id','name','country_code','district','population','country_id']
   for col in enumerate(row):
     print(headers[col[0]],"-", col[1])
-  return render_template('simple-hex.html')   
+  return render_template('index.html')   
 
 @app.route('/test') 
 
