@@ -68,21 +68,35 @@ class hx_Scene {
 
     onMouseLeftClick( event ) {
         // calculate objects intersecting the picking ray
+        console.log(hx_grid.grid());
         var intersects = this.hx_scene.raycaster.intersectObjects( this.hx_scene._scene.children );
-        for ( var i = 0; i < intersects.length; i++ ) {
 
-            if(intersects[ i ].object.selected == false){
-                intersects[ i ].object.material.opacity = 1
-                intersects[ i ].object.material.transparent = false;
-                intersects[ i ].object.material.color.set( 0xff0000 );
-                intersects[ i ].object.selected = true
+            intersects[ intersects.length-1 ].object.selected = !intersects[ intersects.length-1 ].object.selected;
+            console.log(intersects[ intersects.length-1 ])
+            if(intersects[ intersects.length-1 ].object.selected == true){
+                
+                if(intersects[ intersects.length-1 ].object.cell == true){ //if a cell toggle to red
+                    intersects[ intersects.length-1 ].object.material.opacity = 1
+                    intersects[ intersects.length-1 ].object.children = intersects[ intersects.length-1 ].object.oldChildren
+                    intersects[ intersects.length-1 ].object.material.transparent = false;
+                    intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );
+                }else{ //if a tile turn transparent
+                    intersects[ intersects.length-1 ].object.material.opacity = 0
+                    intersects[ intersects.length-1 ].object.material.transparent = true;
+                }
+
             }else{
-                intersects[ i ].object.material.opacity = 0
-                intersects[ i ].object.material.transparent = true;
-                intersects[ i ].object.material.color.set( 0xFFFFFF );  
-                intersects[ i ].object.selected = false             
+
+                if(intersects[ intersects.length-1 ].object.cell == true){ //if a cell turn back to transparent
+                    intersects[ intersects.length-1 ].object.material.opacity = 0
+                    intersects[ intersects.length-1 ].object.material.transparent = true;
+                    intersects[ intersects.length-1 ].object.material.color.set( 0xFFFFFF ); 
+                }else{ //if a tile turn back green
+                    intersects[ intersects.length-1 ].object.material.opacity = 1
+                    intersects[ intersects.length-1 ].object.material.transparent = false;
+                    intersects[ intersects.length-1 ].object.material.color.set( 0x40C843 ); 
+                }           
             }
 
-        }
     }
 }
