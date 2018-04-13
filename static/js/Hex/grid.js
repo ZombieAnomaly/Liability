@@ -10,33 +10,48 @@ class hx_Grid {
     generate(){
         for(var i = 0; i < this.MaxLength; i++){
             for(var j =0; j < this.MaxWidth; j++){
-                var Cell = new hx_Cell().cell();
+                var hxCell = new hx_Cell().cell();
+                var Cell = hxCell.Cell;
                 Cell.pos = {
                     x: j,
                     y: i,
                     h: 0.5
                 }
                 Cell.selected = false;
-                this.add(Cell, 0.5)
+                Cell.cell = true;
+                this.add(hxCell)
                 var offset = 0;
                 if(Cell.pos.y % 2 != 0){
-                    offset = 1
+                    offset = .9
                 }
 
-                Cell.position.set((Cell.pos.x*1.9) + offset,0,Cell.pos.y*1.8)
+                Cell.position.set((Cell.pos.x*1.75) + offset,0,Cell.pos.y*1.5)
                 
                 hx_scene.add(Cell)
             }
         }
     }
 
-    add(cell, height){
+    cleanup(){
+        for(var i = 0; i < this.MaxLength; i++){
+            for(var j =0; j < this.MaxWidth; j++){
+                var key = String(i) + "," + String(j)
+                this.cells[key].hx_cell.Cell.oldChildren = this.cells[key].hx_cell.Cell.children;
+                this.cells[key].hx_cell.rmWireframe();
+            }
+        }
+    }
+
+    add(cell){
         var key, pos;
-        pos = cell.pos;
-        key = String(pos.x) + String(pos.y)
+        pos = cell.Cell.pos;
+        key = String(pos.x) + "," + String(pos.y)
         this.cells[key] = {
-            cell: cell,
-            id: this.guid()
+            hx_cell: cell,
+            hx_tile: null,
+            _id: this.guid(),
+            outline: cell.Cell.children
+           
         };
     }
 
@@ -55,5 +70,9 @@ class hx_Grid {
 
     grid(){
         return this.cells;
+    }
+
+    updateCellObject(key,hxTile){
+        this.cells[key].hx_tile = hxTile
     }
 }

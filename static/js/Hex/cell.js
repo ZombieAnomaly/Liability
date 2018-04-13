@@ -18,6 +18,11 @@ class hx_Cell {
     }
 
     cell(){
-        return this.Cell
+        return this
     }
+
+    rmWireframe(){
+        this.Cell.children = []
+    }
+
 }
