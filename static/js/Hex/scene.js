@@ -100,7 +100,7 @@ class hx_Scene {
                             x = intersects[ intersects.length-1 ].object.pos.x;
                             y = intersects[ intersects.length-1 ].object.pos.y;
                             this.hx_scene.points['B'] = [x,y];
-                            console.log(hx_grid.calculatePath(this.hx_scene.points['A'], this.hx_scene.points['B']));
+                            hx_grid.calculatePath(this.hx_scene.points['A'], this.hx_scene.points['B']);
                         }else{
                             intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );  
                             var x,y;
@@ -128,7 +128,7 @@ class hx_Scene {
     }
 
     cellNeighbor(pos, mark){
-        hx_grid.findNeighbor(pos, mark);
+        console.log(hx_grid.findNeighbor(pos, mark, "object"));
     }
 
 

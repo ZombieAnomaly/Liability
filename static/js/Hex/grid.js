@@ -96,7 +96,7 @@ class hx_Grid {
         
     }
 
-    findNeighbor(pos, mark){
+    findNeighbor(pos, mark, returnType){
         var key = String(pos.x) + "," + String(pos.y)
         var cellObject = this.cells[key];
         var cell = cellObject.hx_cell.Cell;
@@ -113,7 +113,10 @@ class hx_Grid {
             ];
         }
         //console.log(this.validateNeighbors(neighbors));
-        return this.validateNeighbors(neighbors, mark);
+        if (returnType == "object")
+            return this.validateNeighbors(neighbors, mark);
+        else if (returnType == "array")
+            return neighbors;
     }
 
     validateNeighbors(arr, clicked){
@@ -134,6 +137,11 @@ class hx_Grid {
     }
 
     calculatePath(A,B){
+        this.findNeighbor({'x':A[0], 'y':A[1]}, false, 'array')
+        console.log(A);
+    }
+
+    calculateDistance(A,B){
         console.log(A);
 
         var posA = this.offset_to_cube(A);
