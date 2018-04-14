@@ -11,7 +11,7 @@ class hx_Board {
         for(var i = this.Offset[0]; i < this.MaxLength+this.Offset[0]; i++){
             for(var j = this.Offset[1]; j < this.MaxWidth+this.Offset[1]; j++){
                 var hxTile = new hx_Tile();
-                var Tile = hxTile.tile;
+                var Tile = hxTile.tile();
                 Tile.pos = {
                     x: j,
                     y: i,
@@ -44,7 +44,7 @@ class hx_Board {
         this.Tiles[key] = null;
     }
 
-    get board(){
+    board(){
         return this.Tiles;
     }
 }

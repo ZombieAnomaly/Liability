@@ -10,13 +10,14 @@ function RenderHexDemo(){
    
     
     hx_scene.camera().position.set(20,30,20);
-    hx_scene.camera().lookAt(hx_grid.grid['6,6'].hx_cell.Cell.position)
+    hx_scene.camera().lookAt(hx_grid.grid()['6,6'].hx_cell.Cell.position)
     //hx_grid.cleanup();
 }
 
 RenderHexDemo();
 
-console.log(hx_grid.grid);
+console.log(hx_grid.grid());
+
 
 //game logic is handled in update loop
 var update = function(){

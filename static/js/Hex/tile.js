@@ -17,8 +17,8 @@ class hx_Tile {
         this.Wireframe = new THREE.LineSegments( this.WireframeGeometry, this.WireframeMat );
         this.Tile.add( this.Wireframe );
     }
-
-    get tile(){
+  
+    tile(){
         return this.Tile
     }
 

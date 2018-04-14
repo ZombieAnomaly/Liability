@@ -71,19 +71,14 @@ class hx_Scene {
         this.hx_scene.mouse_.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         this.hx_scene.mouse_.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
     }
-
-    
     onMouseLeftClick( event ) {
         // calculate objects intersecting the picking ray
-        
+        console.log(hx_grid.grid());
         var intersects = this.hx_scene.raycaster.intersectObjects( this.hx_scene._scene.children );
-            
+
             intersects[ intersects.length-1 ].object.selected = !intersects[ intersects.length-1 ].object.selected;
+            console.log(intersects[ intersects.length-1 ])
 
-            console.log(intersects[ intersects.length-1 ].object.pos);
-
-            this.hx_scene.cellNeighbor(intersects[ intersects.length-1 ].object.pos, false)
-            
             if(intersects[ intersects.length-1 ].object.selected == true){
                 
                 if(intersects[ intersects.length-1 ].object.cell == true){ //if a cell toggle to red
@@ -92,6 +87,7 @@ class hx_Scene {
                     intersects[ intersects.length-1 ].object.material.transparent = false;
                     intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );
                 }else{ //if a tile turn transparent
+
                     if(this.AStar = true){
                         this.StartMarker = !this.StartMarker;
                         if(!this.StartMarker){
@@ -111,6 +107,9 @@ class hx_Scene {
                     }
                     //intersects[ intersects.length-1 ].object.material.opacity = 0
                     //intersects[ intersects.length-1 ].object.material.transparent = true;
+
+                    intersects[ intersects.length-1 ].object.material.opacity = 0
+                    intersects[ intersects.length-1 ].object.material.transparent = true;
                 }
 
             }else{
@@ -130,6 +129,5 @@ class hx_Scene {
     cellNeighbor(pos, mark){
         hx_grid.findNeighbor(pos, mark);
     }
-
 
 }
