@@ -10,7 +10,7 @@ class hx_Grid {
     generate(){
         for(var i = 0; i < this.MaxLength; i++){
             for(var j =0; j < this.MaxWidth; j++){
-                var hxCell = new hx_Cell().cell();
+                var hxCell = new hx_Cell().cell;
                 var Cell = hxCell.Cell;
                 Cell.pos = {
                     x: j,
@@ -30,6 +30,7 @@ class hx_Grid {
                 hx_scene.add(Cell)
             }
         }
+        this.findNeighbors();
     }
 
     cleanup(){
@@ -54,6 +55,11 @@ class hx_Grid {
            
         };
     }
+
+    get grid(){
+        return this.cells;
+    }
+
     guid() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -90,7 +96,7 @@ class hx_Grid {
         
     }
 
-    findNeighbor(pos, mark){
+    findNeighbor(pos, mark, returnType){
         var key = String(pos.x) + "," + String(pos.y)
         var cellObject = this.cells[key];
         var cell = cellObject.hx_cell.Cell;
@@ -107,7 +113,10 @@ class hx_Grid {
             ];
         }
         //console.log(this.validateNeighbors(neighbors));
-        return this.validateNeighbors(neighbors, mark);
+        if (returnType == "object")
+            return this.validateNeighbors(neighbors, mark);
+        else if (returnType == "array")
+            return neighbors;
     }
 
     validateNeighbors(arr, clicked){
@@ -128,12 +137,16 @@ class hx_Grid {
     }
 
     calculatePath(A,B){
+        this.findNeighbor({'x':A[0], 'y':A[1]}, false, 'array')
         console.log(A);
+    }
+
+    calculateDistance(A,B){
 
         var posA = this.offset_to_cube(A);
         var posB = this.offset_to_cube(B);
 
-        return this.findDistance(posA, posB)
+        return console.log(this.findDistance(posA, posB))
     }
 
     cube_to_evenr(cords){
@@ -157,11 +170,5 @@ class hx_Grid {
 
     findDistance(posA, posB){
         return (Math.abs(posA.x - posB.x) + Math.abs(posA.y - posB.y) + Math.abs(posA.z - posB.z)) / 2
-    grid(){
-        return this.cells;
-    }
-
-    updateCellObject(key,hxTile){
-        this.cells[key].hx_tile = hxTile
     }
 }
