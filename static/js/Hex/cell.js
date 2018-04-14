@@ -17,7 +17,7 @@ class hx_Cell {
         this.Cell.add( this.Wireframe );
     }
 
-    cell(){
+    get cell(){
         return this
     }
 

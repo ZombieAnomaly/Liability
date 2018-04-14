@@ -10,7 +10,7 @@ class hx_Grid {
     generate(){
         for(var i = 0; i < this.MaxLength; i++){
             for(var j =0; j < this.MaxWidth; j++){
-                var hxCell = new hx_Cell().cell();
+                var hxCell = new hx_Cell().cell;
                 var Cell = hxCell.Cell;
                 Cell.pos = {
                     x: j,
@@ -30,6 +30,7 @@ class hx_Grid {
                 hx_scene.add(Cell)
             }
         }
+        this.findNeighbors();
     }
 
     cleanup(){
@@ -55,6 +56,10 @@ class hx_Grid {
         };
     }
 
+    get grid(){
+        return this.cells;
+    }
+
     guid() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -68,12 +73,95 @@ class hx_Grid {
         this.cells[cell.pos].tile = null;
     }
 
-    grid(){
-        return this.cells;
-    }
-
     updateCellObject(key,hxTile){
         this.cells[key].hx_tile = hxTile
     }
-    
+
+    findNeighbors(){
+        for(var c in this.cells){
+            var pos = this.cells[c].hx_cell.Cell.pos;
+            if (pos.y % 2 == 0){ //neighbor list for evens
+                var neighbors = [
+                    [pos.x-1,pos.y],[pos.x,pos.y-1],[pos.x-1,pos.y-1],
+                    [pos.x+1,pos.y],[pos.x-1,pos.y+1],[pos.x,pos.y+1]
+                ];
+            }else{ //neighbor list for odds
+                var neighbors = [
+                    [pos.x-1,pos.y],[pos.x,pos.y-1],[pos.x+1,pos.y-1],
+                    [pos.x+1,pos.y],[pos.x+1,pos.y+1],[pos.x,pos.y+1]
+                ];
+            }
+            this.cells[c].hx_cell.neighbors = this.validateNeighbors(neighbors, false);
+        }   
+        
+    }
+
+    findNeighbor(pos, mark){
+        var key = String(pos.x) + "," + String(pos.y)
+        var cellObject = this.cells[key];
+        var cell = cellObject.hx_cell.Cell;
+
+        if (pos.y % 2 == 0){ //neighbor list for evens
+            var neighbors = [
+                [pos.x-1,pos.y],[pos.x,pos.y-1],[pos.x-1,pos.y-1],
+                [pos.x+1,pos.y],[pos.x-1,pos.y+1],[pos.x,pos.y+1]
+            ];
+        }else{ //neighbor list for odds
+            var neighbors = [
+                [pos.x-1,pos.y],[pos.x,pos.y-1],[pos.x+1,pos.y-1],
+                [pos.x+1,pos.y],[pos.x+1,pos.y+1],[pos.x,pos.y+1]
+            ];
+        }
+        //console.log(this.validateNeighbors(neighbors));
+        return this.validateNeighbors(neighbors, mark);
+    }
+
+    validateNeighbors(arr, clicked){
+        for(var i=0;i<arr.length;i++){
+            var key = String(arr[i][0]+","+arr[i][1]);
+            if (!(key in this.cells)){
+                arr[i] = null;
+            }
+            arr[i] = this.cells[key]
+            if (clicked && arr[i] != undefined){
+                arr[i].hx_tile.Tile.material.opacity = 0
+                arr[i].hx_tile.Tile.material.transparent = true;
+                arr[i].hx_tile.Tile.material.color.set( 0xFFFFFF );
+            }
+        }
+        
+        return arr;
+    }
+
+    calculatePath(A,B){
+        console.log(A);
+
+        var posA = this.offset_to_cube(A);
+        var posB = this.offset_to_cube(B);
+
+        return this.findDistance(posA, posB)
+    }
+
+    cube_to_evenr(cords){
+        var col = cube.x + (cube.z + (cube.z%2)) / 2
+        var row = cube.z
+
+        return [col, row]
+    }
+
+    offset_to_cube(cords){
+        var x = cords[0] - (cords[1] + (cords[1]%2)) / 2
+        var z = cords[1]
+        var y = -x-z
+        
+        return {
+            'x':x,
+            'y':y,
+            'z':z
+        }
+    }
+
+    findDistance(posA, posB){
+        return (Math.abs(posA.x - posB.x) + Math.abs(posA.y - posB.y) + Math.abs(posA.z - posB.z)) / 2
+    }
 }

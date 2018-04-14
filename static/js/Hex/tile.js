@@ -18,7 +18,7 @@ class hx_Tile {
         this.Tile.add( this.Wireframe );
     }
 
-    tile(){
+    get tile(){
         return this.Tile
     }
 

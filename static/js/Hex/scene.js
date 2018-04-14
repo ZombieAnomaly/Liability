@@ -13,6 +13,12 @@ class hx_Scene {
         this.mouse_ = new THREE.Vector2();
         this.mouse_.x = 0
         this.mouse_.y = 0
+        this.StartMarker = true;
+        this.AStar = true;
+        this.points = {
+            'A': null,
+            'B': null
+        }
         var green = new THREE.Color( 0x40C843 );
 
 
@@ -66,13 +72,18 @@ class hx_Scene {
         this.hx_scene.mouse_.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
     }
 
+    
     onMouseLeftClick( event ) {
         // calculate objects intersecting the picking ray
-        console.log(hx_grid.grid());
+        
         var intersects = this.hx_scene.raycaster.intersectObjects( this.hx_scene._scene.children );
-
+            
             intersects[ intersects.length-1 ].object.selected = !intersects[ intersects.length-1 ].object.selected;
-            console.log(intersects[ intersects.length-1 ])
+
+            console.log(intersects[ intersects.length-1 ].object.pos);
+
+            this.hx_scene.cellNeighbor(intersects[ intersects.length-1 ].object.pos, false)
+            
             if(intersects[ intersects.length-1 ].object.selected == true){
                 
                 if(intersects[ intersects.length-1 ].object.cell == true){ //if a cell toggle to red
@@ -81,8 +92,25 @@ class hx_Scene {
                     intersects[ intersects.length-1 ].object.material.transparent = false;
                     intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );
                 }else{ //if a tile turn transparent
-                    intersects[ intersects.length-1 ].object.material.opacity = 0
-                    intersects[ intersects.length-1 ].object.material.transparent = true;
+                    if(this.AStar = true){
+                        this.StartMarker = !this.StartMarker;
+                        if(!this.StartMarker){
+                            intersects[ intersects.length-1 ].object.material.color.set( 0x0047FF );
+                            var x,y;
+                            x = intersects[ intersects.length-1 ].object.pos.x;
+                            y = intersects[ intersects.length-1 ].object.pos.y;
+                            this.hx_scene.points['B'] = [x,y];
+                            console.log(hx_grid.calculatePath(this.hx_scene.points['A'], this.hx_scene.points['B']));
+                        }else{
+                            intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );  
+                            var x,y;
+                            x = intersects[ intersects.length-1 ].object.pos.x;
+                            y = intersects[ intersects.length-1 ].object.pos.y;
+                            this.hx_scene.points['A'] = [x,y];
+                        }
+                    }
+                    //intersects[ intersects.length-1 ].object.material.opacity = 0
+                    //intersects[ intersects.length-1 ].object.material.transparent = true;
                 }
 
             }else{
@@ -97,6 +125,11 @@ class hx_Scene {
                     intersects[ intersects.length-1 ].object.material.color.set( 0x40C843 ); 
                 }           
             }
-
     }
+
+    cellNeighbor(pos, mark){
+        hx_grid.findNeighbor(pos, mark);
+    }
+
+
 }
