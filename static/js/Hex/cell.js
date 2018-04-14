@@ -16,7 +16,6 @@ class hx_Cell {
         this.Wireframe = new THREE.LineSegments( this.WireframeGeometry, this.WireframeMat );
         this.Cell.add( this.Wireframe );
     }
-
     cell(){
         return this
     }

@@ -18,6 +18,7 @@ RenderHexDemo();
 
 console.log(hx_grid.grid());
 
+
 //game logic is handled in update loop
 var update = function(){
     hx_scene.controlsUpdate();  
