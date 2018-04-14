@@ -10,7 +10,7 @@ class hx_Grid {
     generate(){
         for(var i = 0; i < this.MaxLength; i++){
             for(var j =0; j < this.MaxWidth; j++){
-                var hxCell = new hx_Cell().cell();
+                var hxCell = new hx_Cell().cell;
                 var Cell = hxCell.Cell;
                 Cell.pos = {
                     x: j,
@@ -30,6 +30,7 @@ class hx_Grid {
                 hx_scene.add(Cell)
             }
         }
+        this.findNeighbors();
     }
 
     cleanup(){
@@ -54,6 +55,11 @@ class hx_Grid {
            
         };
     }
+
+    get grid(){
+        return this.cells;
+    }
+
     guid() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -136,12 +142,11 @@ class hx_Grid {
     }
 
     calculateDistance(A,B){
-        console.log(A);
 
         var posA = this.offset_to_cube(A);
         var posB = this.offset_to_cube(B);
 
-        return this.findDistance(posA, posB)
+        return console.log(this.findDistance(posA, posB))
     }
 
     cube_to_evenr(cords){
@@ -165,11 +170,5 @@ class hx_Grid {
 
     findDistance(posA, posB){
         return (Math.abs(posA.x - posB.x) + Math.abs(posA.y - posB.y) + Math.abs(posA.z - posB.z)) / 2
-    grid(){
-        return this.cells;
-    }
-
-    updateCellObject(key,hxTile){
-        this.cells[key].hx_tile = hxTile
     }
 }

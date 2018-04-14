@@ -30,15 +30,15 @@ class hx_Scene {
         window.addEventListener( 'mousedown', this.onMouseLeftClick, false );
     }
 
-    renderer(){
+    get renderer(){
         return this._renderer;
     }
 
-    camera(){
+    get camera(){
         return this._camera
     }
 
-    scene(){
+    get scene(){
         return this._scene
     }
 
@@ -67,18 +67,23 @@ class hx_Scene {
     onMouseMove( event ) {
         // calculate mouse position in normalized device coordinates
         // (-1 to +1) for both components
-        var rect = this.hx_scene.renderer().domElement.getBoundingClientRect();
+        var rect = this.hx_scene.renderer.domElement.getBoundingClientRect();
         this.hx_scene.mouse_.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
         this.hx_scene.mouse_.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
     }
+
+    
     onMouseLeftClick( event ) {
         // calculate objects intersecting the picking ray
-        console.log(hx_grid.grid());
+        
         var intersects = this.hx_scene.raycaster.intersectObjects( this.hx_scene._scene.children );
-
+            
             intersects[ intersects.length-1 ].object.selected = !intersects[ intersects.length-1 ].object.selected;
-            console.log(intersects[ intersects.length-1 ])
 
+            console.log(intersects[ intersects.length-1 ].object.pos);
+
+            this.hx_scene.cellNeighbor(intersects[ intersects.length-1 ].object.pos, false)
+            
             if(intersects[ intersects.length-1 ].object.selected == true){
                 
                 if(intersects[ intersects.length-1 ].object.cell == true){ //if a cell toggle to red
@@ -87,7 +92,6 @@ class hx_Scene {
                     intersects[ intersects.length-1 ].object.material.transparent = false;
                     intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );
                 }else{ //if a tile turn transparent
-
                     if(this.AStar = true){
                         this.StartMarker = !this.StartMarker;
                         if(!this.StartMarker){
@@ -96,7 +100,7 @@ class hx_Scene {
                             x = intersects[ intersects.length-1 ].object.pos.x;
                             y = intersects[ intersects.length-1 ].object.pos.y;
                             this.hx_scene.points['B'] = [x,y];
-                            hx_grid.calculatePath(this.hx_scene.points['A'], this.hx_scene.points['B']);
+                            hx_grid.calculateDistance(this.hx_scene.points['A'], this.hx_scene.points['B']);
                         }else{
                             intersects[ intersects.length-1 ].object.material.color.set( 0xFF0000 );  
                             var x,y;
@@ -107,9 +111,6 @@ class hx_Scene {
                     }
                     //intersects[ intersects.length-1 ].object.material.opacity = 0
                     //intersects[ intersects.length-1 ].object.material.transparent = true;
-
-                    intersects[ intersects.length-1 ].object.material.opacity = 0
-                    intersects[ intersects.length-1 ].object.material.transparent = true;
                 }
 
             }else{
@@ -129,5 +130,6 @@ class hx_Scene {
     cellNeighbor(pos, mark){
         console.log(hx_grid.findNeighbor(pos, mark, "object"));
     }
+
 
 }
