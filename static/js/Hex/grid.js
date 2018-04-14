@@ -75,4 +75,5 @@ class hx_Grid {
     updateCellObject(key,hxTile){
         this.cells[key].hx_tile = hxTile
     }
+    
 }
